@@ -1,0 +1,16 @@
+version: '3'
+
+services:
+  tick:
+    build: .
+    ports:
+     - 3000:3000
+    volumes:
+      - '.:/var/app'
+    depends_on:
+      - db
+  db:
+    image: "postgres:10"
+    # if you use the host to persist the data through builds
+    # volumes:
+    #   - /your/local/path:/var/lib/postgresql/data
