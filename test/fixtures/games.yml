@@ -1,0 +1,14 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  state: MyString
+  host: one
+  next_player: 1
+  winner: 1
+
+two:
+  state: MyString
+  host: two
+  guest: one
+  next_player: 1
+  winner: 1
