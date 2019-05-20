@@ -11,6 +11,24 @@ module Api
         render :json => {games: games_array}
       end
 
+      def show
+        game = Game.where("host_id = ?  OR guest_id = ?", current_user.id, current_user.id).includes(:host, :guest).take
+        if !game
+          render status: :not_found
+        else
+          render :json => {
+            game: {
+              id: game.id,
+              host: game.host,
+              guest: game.guest,
+              next_player: game.next_player,
+              winner: game.winner,
+              state: game.state
+            }
+          }
+        end
+      end
+
       def create
         new_state = Array.new(9, '-').join(',')
         game = Game.new(host_id: current_user.id, state: new_state)
@@ -18,6 +36,15 @@ module Api
           render :json => {game: game}, :status => :created
         else
           render :json => {errors: game.errors}, :status => :internal_error
+        end
+      end
+
+      def update
+        spot = permit_spot[:spot]
+        game = Game.where("host_id = ?  OR guest_id = ? AND next_player = ?", current_user.id, current_user.id, current_user.id).includes(:host, :guest).take
+        if !game
+          render status: :not_found
+        else
         end
       end
 
@@ -32,6 +59,11 @@ module Api
         else
           render status: :internal_error
         end
+      end
+
+      private
+      def permit_spot
+        params.permit(:spot)
       end
     end
   end
