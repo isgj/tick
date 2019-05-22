@@ -25,9 +25,11 @@ module Api
       end
 
       def has_winner?
-        if [0,2,6,8].include? @last_spot && @spots[@last_spot] != "-"
-          return true if @spots.values_at(0,4,8).uniq.length == 1
-          return true if @spots.values_at(2,4,6).uniq.length == 1
+        if [0,2,6,8].include?(@last_spot) && @spots[@last_spot] != "-"
+          first_diagonal = @spots.values_at(0,4,8)
+          second_diagonal = @spots.values_at(2,4,6)
+          return true if !first_diagonal.include?('-') && first_diagonal.uniq.length == 1
+          return true if !second_diagonal.include?('-') && second_diagonal.uniq.length == 1
         end
         check_row || check_column
       end
