@@ -32,9 +32,9 @@ module Api
 
       def update
         param = permit_update
-        if param.has_key?(:spot)
+        if param.has_key?(:game) && param[:game].has_key?(:spot)
           game = Game.turn_of(current_user.id).find(params[:id])
-          if !game.play(param[:spot].to_i, game.next_player == game.host_id ? "O" : "X")
+          if !game.play(param[:game][:spot].to_i, game.next_player == game.host_id ? "O" : "X")
             return render status: :unprocessable_entity
           end
         else
@@ -51,7 +51,7 @@ module Api
 
       private
       def permit_update
-        params.permit(:spot)
+        params.permit(:game => :spot)
       end
 
       def serialize(game)
